@@ -1,9 +1,22 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import {supabase} from './client'
 
 const App = () => {
+  const [cases, setCases] = useState([]);
+
+  useEffect(() => {
+    fetchCases();
+  }, [])
+  
+
+  const fetchCases = async () => {
+    const { data } = await supabase.from('cases').select();
+    setCases(data);
+  }
+
   return (
-    <div className="bg-green-300">
-      <h1 className=' m-8'>Hello World</h1>
+    <div>
+      {cases.length > 0 && <img src={cases[0].imageSrc} />}
     </div>
   )
 }
