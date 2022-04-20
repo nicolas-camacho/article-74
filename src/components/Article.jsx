@@ -1,9 +1,8 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 const Article = () => (
-    <div className='grid place-items-center m-10'>
-      <h1 className='font-mono font-bold text-7xl text-center mb-12 underline'>Articulo 74</h1>
+    <div className='grid place-items-center m-7'>
+      <h1 className='font-mono font-bold text-3xl md:text-7xl text-center mb-12 underline'>Articulo 74</h1>
       <div className="font-mono text-xl md:text-2xl p-7 border-4 border-black shadow-custom">
         <p className='mb-7'>
             Los conductores deben reducir la velocidad a treinta (30) kilómetros por hora en los siguientes casos:
