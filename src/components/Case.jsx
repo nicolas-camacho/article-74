@@ -9,13 +9,28 @@ const Case = ({ caso, counterHandler, nextHandler }) => {
 
     const [pause, setPause] = useState(false);
     const [message, setMessage] = useState(CONGRATULATIONS);
+    const [gif, setGif] = useState(null);
 
-    const validationHandler = (selection) => {
+    const searchGif = (text) => {
+        const giphyKey = import.meta.env.VITE_GIPHY_KEY
+        let giphyApiURL = `https://api.giphy.com/v1/gifs/search?q=${text}&api_key=${giphyKey}`;
+        fetch(giphyApiURL).then(data => {
+            return data.json()
+        }).then(json => {
+            let randomIndex = Math.floor(Math.random() * (json.data.length - 1));
+            let imgPath = json.data[randomIndex].images.fixed_height.url
+            setGif(imgPath);
+        });
+    }
+
+    const validationHandler = async (selection) => {
         if (caso.answer === selection) {
             counterHandler(true);
             setMessage(CONGRATULATIONS);
+            searchGif('congrats');
         } else {
-            setMessage(FAILURE)
+            setMessage(FAILURE);
+            searchGif('wrong');
         }
         setPause(true);
     }
@@ -27,9 +42,11 @@ const Case = ({ caso, counterHandler, nextHandler }) => {
     
     return (
         <div className=" flex justify-evenly m-20 flex-wrap font-mono">
-            <img className=" border-4 border-black" src={caso.imageSrc} alt="imagen de caso" width={700}/>
+            {pause === false ? 
+                <img className=" border-4 border-black" src={caso.imageSrc} alt="imagen de caso" width={700}/> :
+                <img className=" border-4 border-black" src={gif} alt="gif de juego en pausa" width={700} />}
             <div className="grid place-items-center mt-5">
-                <h1 className="text-2xl md:text-4xl font-bold">¿Deberia Reducir la velocidad a 30km o menos?</h1>
+                {!pause && <h1 className="text-2xl md:text-4xl font-bold">¿Deberia Reducir la velocidad a 30km o menos?</h1>}
                 {!pause && (
                     <div className="grid gap-10 grid-cols-2 mt-10 place-items-start">
                         <Button handler={() => validationHandler(true) } text="Si Deberia" />
