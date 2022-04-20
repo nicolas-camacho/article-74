@@ -30,7 +30,7 @@ const Case = ({ caso, counterHandler, nextHandler }) => {
             searchGif('congrats');
         } else {
             setMessage(FAILURE);
-            searchGif('wrong');
+            searchGif('no');
         }
         setPause(true);
     }

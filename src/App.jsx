@@ -4,13 +4,14 @@ import {supabase} from './client'
 import Article from './components/Article';
 import Button from './components/Button';
 import Case from './components/Case';
+import GameOver from './components/GameOver';
 
 const App = () => {
   const [cases, setCases] = useState([]);
   const [gameState, setGameState] = useState(false);
   const [selected, setSelected] = useState(null);
   const [counter, setCounter] = useState(0);
-  const [pause, setPause] = useState(false);
+  const [endGame, setEndGame] = useState(false);
 
   useEffect(() => {
     fetchCases();
@@ -32,7 +33,7 @@ const App = () => {
     if(cases.length < 1) {
       setGameState(false);
       fetchCases();
-      counterHandler(false)
+      setEndGame(true);
     } else {
       setSelected(cases[randomIndex]);
       let newCases = cases.filter((_, index) => index != randomIndex);
@@ -48,11 +49,18 @@ const App = () => {
     }
   }
 
+  const finishGame = () => {
+    counterHandler(false);
+    setEndGame(false);
+  }
+
   return (
     <>
-      <div className=' h-8 bg-purple-500'></div>
-      {!gameState && <Article />}
-      {!gameState && <Button handler={startGame} text="Comenzar" />}
+      <div className=' h-6 bg-purple-500'></div>
+      {!gameState && !endGame && <Article />}
+      {!gameState && !endGame && <Button handler={startGame} text="Comenzar" />}
+      {endGame && <GameOver counter={counter} />}
+      {endGame && <Button handler={finishGame} text="Terminar" />}
       {gameState && <Case caso={selected} nextHandler={setNewCase} counterHandler={counterHandler} />}
       {gameState && <h1 className='grid place-items-center font-mono text-2xl font-extrabold'>Puntos acumulados: {counter}</h1>}
     </>
